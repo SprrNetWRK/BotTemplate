@@ -1,0 +1,19 @@
+{
+	"TwitchClientId": "pcdu6gu9jqncffqi6qx9yvbxlofqlu",
+	"TwitchclientSecret": "lc1vkk2ryobmxelxrw45vxztrbhjjw",
+	"logs": "",
+	"modlogs": "",
+	"rolereaction": {
+		"channel": ""
+	},
+	"twitch_channel": "",
+	"stream_annonce": "",
+	"autorole": [],
+	"streamers": [],
+	"stream_states": [],
+	"stream_titles": [],
+	"stream_games": [],
+	"language": "english",
+	"prefix": "!",
+	"botname": "Bot Maker"
+}
