@@ -1,5 +1,5 @@
-const e = require("../config/config").emotes;
-const moment = require("moment-timezone");
+const e = require("../config.js").emotes;
+const moment = require("moment");
 moment.locale("en");
 
 module.exports = class {
@@ -32,7 +32,7 @@ module.exports = class {
 			ERROR_NSFW_DEACTIVATED: "This command is not available because the module ``NSFW`` is not available on this server.\nAsk a server administrator to activate it.",
 			ERROR_FORTNITE_PLATFORM: "Please enter a valid platform (pc, xbox, psn).",
 			ERROR_FORTNITE_PLATFORM_USER_NOT_FOUND: "This user was not found on the specified platform.",
-			BOT_MENTION: (prefix) => `>>> My prefix is \`\`${prefix}\`\` on this server.\nYou can see my commands with \`\`${prefix}help\`\`.\nIf you have any issue, please join the official Lycos' server (https://discord.gg/64zRC73) or contact LePtitMetalleux#1604 or BaptisteGT#0123 in direct messages.`,
+			BOT_MENTION: (prefix) => `>>> My prefix is \`\`${prefix}\`\` on this server.\nYou can see my commands with \`\`${prefix}help\`\`.\nIf you have any issue, please join the official Lycos' server (discord.gg/64zRC73) or contact LePtitMetalleux#1604 or BaptisteGT#0123 in direct messages.`,
 			/* Giveaway */
 			GIVEAWAY_DESCRIPTION: "Allows you to manage giveaways easily !",
 			GIVEAWAY_USAGE: (prefix) => `${prefix}giveaway [start/edit/reroll/end/delete]`,
@@ -42,7 +42,9 @@ module.exports = class {
 			GIVEAWAY_NO_WINNERCOUNT: "Please indicate the number of winners !",
 			GIVEAWAY_NO_PRIZE: "Please indicate something to win !",
 			GIVEAWAY_ERR_NO_ID: "You must enter the giveaway message ID !",
-			GIVEAWAY_TIME_NOT_POSITIVE: "The giveaway's duration can't be netgative or equal to 0!",
+			GIVEAWAY_WINNERS_NOT_POSITIVE: "Winner's number can't be negative or equal to 0!",
+			GIVEAWAY_TOO_LONG: "Given duration is too long. You can't give a date after Tuesday, April 20th, 271,821.",
+			GIVEAWAY_TIME_NOT_POSITIVE: "The giveaway's duration can't be negative or equal to 0!",
 			GIVEAWAY_ERR_REROLL_MSG_ENDED: (messageID) => `No giveaway **ended** found with message ID \`${messageID}\`.`,
 			GIVEAWAY_ERR_MESSAGE_NOT_FOUND: (messageID) => `No giveaway found with message ID \`${messageID}\`.`,
 			GIVEAWAY_REROLL_NO_WINNERSCOUNT: "Please indicate the number of winners to be drawn !",
@@ -149,7 +151,7 @@ module.exports = class {
 				"Administration",
 				"Moderation",
 				"General",
-				"Entertainment",
+				"Fun",
 				"Stream",
 				"Game statistics",
 				"Music",
@@ -162,7 +164,7 @@ module.exports = class {
 			Erorr: TypeError: role.createdTimestamp.toUTCString is not a function
 			Context: I just typed the .role-info Blurple command and I got this error.`,
 			BUGREPORT_NO_ARGS: "Please describe the issue with at least 10 characters and a maximum of 1900.",
-			BUGREPORT_REPORT_SEND: "The bug has been reported successfully, it will be processed as fast as possible et will be fixed in a future update.\nTo be aware of next updates, join Lycos' Discord (https://discord.gg/64zRC73)",
+			BUGREPORT_REPORT_SEND: "The bug has been reported successfully, it will be processed as fast as possible et will be fixed in a future update.\nTo be aware of next updates, join Lycos' Discord (discord.gg/64zRC73)",
 			/* Invitation */
 			INVITE_DESCRIPTION: "Give the invitation to add the bot on a server.",
 			INVITE_USAGE: (prefix) => `${prefix}invite`,
@@ -199,6 +201,15 @@ module.exports = class {
 			CAT_DESCRIPTION: "Have fun watching cat pictures.",
 			CAT_USAGE: (prefix) => `${prefix}cat`,
 			CAT_EXAMPLES: (prefix) => `${prefix}cat`,
+			/* Chrono */
+			CHRONO_DESCRIPTION: "Creates a stopwatch",
+			CHRONO_USAGE: (prefix) => `${prefix}chrono [start/stop]`,
+			CHRONO_EXAMPLES: (prefix) => `${prefix}chrono start\n${prefix}chrono stop`,
+			CHRONO_METHODS: "Do `chrono start` to start the stopwatch and `chrono stop` to stop it.",
+			CHRONO_RUNNING: "You have already started a stopwatch!",
+			CHRONO_STARTED: "Stopwatch started! Do `chrono stop` to stop it.",
+			CHRONO_NOT_RUNNING: "You didn't started any stopwatch!",
+			CHRONO_STOPPED: (result) => `Stopwatch stopped at ${result}`,
 			/* Dog */
 			DOG_DESCRIPTION: "Have fun watching dog pictures.",
 			DOG_USAGE: (prefix) => `${prefix}dog`,
@@ -417,6 +428,16 @@ module.exports = class {
 			QRCODE_USAGE: (prefix) => `${prefix}qrcode [text]`,
 			QRCODE_EXAMPLES: (prefix) => `${prefix}qrcode Secret code`,
 			QRCODE_MESSAGE: "You must include something to convert to a QR Code.",
+			/* Reminder */
+			REMINDER_DESCRIPTION: "Creates a reminder",
+			REMINDER_USAGE: (prefix) => `${prefix}reminder [time] [toRemind]`,
+			REMINDER_EXAMPLES: (prefix) => `${prefix}reminder 12h Upvote Lycos`,
+			REMINDER_NO_TIME: "You must provide how long I must remind you.",
+			REMINDER_NO_REMIND: "You must provide what I have to remind to you.",
+			REMINDER_TOO_LONG: "Wow... I'll never remember all that ! Please give me somethis shorter to remember.",
+			REMINDER_TITLE: "Reminder",
+			REMINDER_STARTED: (toRemind, time) => `Perfect, I'll remind you to ${toRemind} in ${time}.`,
+			REMINDER_ENDED: (author, toRemind) => `<@!${author}>, it's time to ${toRemind} !`,
 			/* Role */
 			ROLE_INFO_DESCRIPTION: "Displays information for the specified role.",
 			ROLE_INFO_USAGE: (prefix) => `${prefix}role-info [@Role/ID]`,
@@ -505,19 +526,19 @@ module.exports = class {
 			WEATHERINFO_EMBED_DESCRIPTION_YESTERDAY: (result) => `**Température Max/Min** : ${result[0].forecast[0].high}°C/${result[0].forecast[0].low}°C
 **Météo :** ${result[0].forecast[0].skytextday}
 **Précipitations :** ${result[0].forecast[0].precip !== "" ? `${result[0].forecast[0].precip}` : `0`}%`,
-			WEATHERINFO_EMBED_TITLE_TOMORROW: (result) => `Météo de ${result[0].location.name} le ${result[0].forecast[1].day} ${date(result[0].forecast[1].date)}.`,
+			WEATHERINFO_EMBED_TITLE_TOMORROW: (result) => `Météo de ${result[0].location.name} the ${result[0].forecast[1].day} ${date(result[0].forecast[1].date)}.`,
 			WEATHERINFO_EMBED_DESCRIPTION_TOMORROW: (result) => `**Temperature Max/Min:** ${result[0].forecast[1].high}°C/${result[0].forecast[1].low}°C
 **Weather:** ${result[0].forecast[1].skytextday}
 **Précipitations :** ${result[0].forecast[1].precip}%`,
-			WEATHERINFO_EMBED_TITLE_J2: (result) => `Météo de ${result[0].location.name} le ${result[0].forecast[2].day} ${date(result[0].forecast[2].date)}.`,
+			WEATHERINFO_EMBED_TITLE_J2: (result) => `Météo de ${result[0].location.name} the ${result[0].forecast[2].day} ${date(result[0].forecast[2].date)}.`,
 			WEATHERINFO_EMBED_DESCRIPTION_J2: (result) => `**Température Max/Min:** ${result[0].forecast[2].high}°C/${result[0].forecast[2].low}°C
 **Météo :** ${result[0].forecast[2].skytextday}
 **Précipitations :** ${result[0].forecast[2].precip}%`,
-			WEATHERINFO_EMBED_TITLE_J3: (result) => `Météo de ${result[0].location.name} le ${result[0].forecast[3].day} ${date(result[0].forecast[3].date)}.`,
+			WEATHERINFO_EMBED_TITLE_J3: (result) => `Météo de ${result[0].location.name} the ${result[0].forecast[3].day} ${date(result[0].forecast[3].date)}.`,
 			WEATHERINFO_EMBED_DESCRIPTION_J3: (result) => `**Température Max/Min** : ${result[0].forecast[3].high}°C/${result[0].forecast[3].low}°C
 **Météo :** ${result[0].forecast[3].skytextday}
 **Précipitations :** ${result[0].forecast[3].precip}%`,
-			WEATHERINFO_EMBED_TITLE_J4: (result) => `Météo de ${result[0].location.name} le ${result[0].forecast[4].day} ${date(result[0].forecast[4].date)}.`,
+			WEATHERINFO_EMBED_TITLE_J4: (result) => `Météo de ${result[0].location.name} the ${result[0].forecast[4].day} ${date(result[0].forecast[4].date)}.`,
 			WEATHERINFO_EMBED_DESCRIPTION_J4: (result) => `**Température Max/Min** : ${result[0].forecast[4].high}°C/${result[0].forecast[4].low}°C
 **Météo :** ${result[0].forecast[4].skytextday}
 **Précipitations :** ${result[0].forecast[4].precip}%`,
@@ -585,6 +606,19 @@ module.exports = class {
 			SUPPORT_EXAMPLES: (prefix) => `${prefix}support Hello, I thought I found a bug in your bot.`,
 			SUPPORT_NO_ARGS: "Please describe your problem with at least 10 characters and a maximum of 1900.",
 			SUPPORT_QUESTION_SEND: "Your question has been sent to support. Please wait for a response.",
+			/* Update */
+			UPDATE_DESCRIPTION: "Shows last dev logs.",
+			UPDATE_USAGE: (prefix) => `${prefix}update`,
+			UPDATE_EXAMPLES: (prefix) => `${prefix}update`,
+			UPDATE_TITLE: (version) => `Dev logs | Version ${version}`,
+			UPDATE_ADD: `**•** Added \`lycos-suggestion\` command.
+			**•** Added \`setsuggestions\` command.`,
+			UPDATE_UPDATE: `**•** Updated \`suggestion\` command : It send the suggestion in the suggestions channel of the server.
+			**•** Corrected translation and writing errors.
+			**•** Fixed a bug that allows a channel to be locked or unlocked when it already was.
+			**•** Fixed a bug in the \`giveaway\` command, which allows to set a negative amount of winners. 
+			**•** Fixed a bug in the \`giveaway\` command, where the bots didn't responds when setting anything as a duration or a too long duration.`,
+			UPDATE_REMOVE: "",
 			/* Suggestion */
 			SUGGESTION_DESCRIPTION: "Allows you to send a suggestion about the bot",
 			SUGGESTION_USAGE: (prefix) => `${prefix}suggestion [Suggestion]`,
@@ -654,8 +688,10 @@ module.exports = class {
 			PLAY_EXAMPLES: ".play Our Last Night - Younger Dreams\n.play https://www.youtube.com/watch?v=EM7CJcfZbpM\n.play https://open.spotify.com/track/3YU9WNqpBjG3uI59NEQUH5?si=MVwzgB8DSDye9abZ5gihCw",
 			PLAY_NO_VOICECHANNEL: "You must be in a voice channel to play music.",
 			PLAY_NO_ARGS: "Please provide a music to play.",
-			PLAY_NO_TRACK_FOUND: "Sorry, I couldn't find anything corresponding to your research.",
+			PLAY_NO_TRACK_FOUND: "Sorry, I couldn't find anything ont YouTube corresponding to",
 			PLAY_CHOICE: "Send the number of the track you want to play!",
+			PLAY_INVALID_NUMBER: "You must send a valid number between 1 and",
+			PLAY_INVALID_ANSWER: 'You did not provide a valid response... Please send the command again!',
 			PLAY_SONGS_ADDED: "songs added to the queue!",
 			PLAY_SONG_ADDED: "added to the queue!",
 			PLAY_END: "There is no more music in the queue",
@@ -663,6 +699,7 @@ module.exports = class {
 			PLAY_AGAIN: (track) => `Playing \`${track}\`... AGAIN!`,
 			PLAY_NEWPLAY: (track) => `Now playing \`${track}\`.`,
 			PLAY_CHANNEL_EMPTY: "Stop playing, there is no more member in the voice channel",
+			PLAY_MISSING_PERMS: "I am not able to join your voice channel, please check my permissions!",
 			/* Spotify */
 			SPOTIFY_DESCRIPTION: "Plays requested music, album or playlist (Only Spotify links)",
 			SPOTIFY_USAGE: (prefix) => `${prefix}spotify [Link]`,
@@ -911,6 +948,15 @@ module.exports = class {
 			RR_ADD_USER: (g, r) => `> <:lycosV:631854492173991947> ${g.name} | Given role: ${r.name}`,
 			RR_REMOVE_USER: (g, r) => `> <:lycosX:631854509798326322> ${g.name} | Role removed: ${r.name}`,
 			RR_ROLE_BOT: "You can't use a bot's role in the rolereaction!",
+			/* Setsuggestion */
+			SETSUGGESTION_DESCRIPTION: "Allows the selection of the suggestion display channel.",
+			SETSUGGESTION_USAGE: (prefix) => `${prefix}setlogs [#channel/ID]`,
+			SETSUGGESTION_EXAMPLES: (prefix) => `${prefix}setlogs #suggestion`,
+			SETSUGGESTION_NO_ARGS: (g) => `${g.suggestions_channel === null || g.suggestions_channel === "" ? `There is currently no suggestion channel.` : `The suggestion channel is currently <#${g.suggestions_channel}>.`}\nAnswer by mentioning the channel or by indicating its ID in order to make it the channel for posting suggestions.`,
+			SETSUGGESTION_SAME: (c) => `<#${c}> is already the channel for posting suggestions.`,
+			SETSUGGESTION_SUCCESS: (c) => `Suggestions will now be displayed in the channel <#${c}>.`,
+			SETSUGGESTION_NOT_TEXT: "Supplied channel isn't a text channel!",
+			SUGGESTION_NOT_SET: "Suggestions channel isn't defined, I can't send you suggestion.",
 			/* Setlogs */
 			SETLOGS_DESCRIPTION: "Allows the selection of the log display channel.",
 			SETLOGS_USAGE: (prefix) => `${prefix}setlogs [#channel/ID]`,
@@ -1062,11 +1108,11 @@ You can find it here: https://clips.twitch.tv/${clip}`,
 **Position in the category :** ${c.position}
 **Position in the server :** ${c.rawPosition}`,
 			LOGS_GUILD_MEMBER_ADD_TITLE: "Arrival of a new member!",
-			LOGS_GUILD_MEMBER_ADD_DESC: (m) => `${m} - **${m.user.tag}** arrived on **__${m.guild.name}__**!
-There are now **${m.guild.memberCount}** people on the server!`,
+			LOGS_GUILD_MEMBER_ADD_DESC: (m) => `${m} - **${m.user.tag}** joined **__${m.guild.name}__**!
+There are now **${m.guild.memberCount}** members on the server!`,
 			LOGS_GUILD_MEMBER_REMOVE_TITLE: "Departure of member!",
-			LOGS_GUILD_MEMBER_REMOVE_DESC: (m) => `${m} - **${m.user.tag}** left from **__${m.guild.name}__**!
-There are now **${m.guild.memberCount}** people on the server!`,
+			LOGS_GUILD_MEMBER_REMOVE_DESC: (m) => `${m} - **${m.user.tag}** left **__${m.guild.name}__**!
+There are now **${m.guild.memberCount}** members on the server!`,
 			LOGS_CHANNEL_PINS_UPDATE_TITLE: "Modification of messages pinned in a channel!",
 			LOGS_CHANNEL_PINS_UPDATE_DESC: (channel, time) => `**Salon :** ${channel.name} - ${channel} - ${channel.id}
 **Modification to** ${moment(time).format("LLLL")}`,
