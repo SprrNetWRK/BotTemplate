@@ -9,11 +9,9 @@ const { Provider, Client: PictURLClient } = require("pict-url");
 const { GiveawaysManager } = require("discord-giveaways");
 const logs = require('discord-logs');
 const { Player } = require("discord-player");
-/**
- * @class Lycos
- * @extends {Client}
-**/
-class Lycos extends Client {
+
+
+class Bot extends Client {
 	constructor(options) {
 		super(options);
 		// This will load the config.js file that contains our basic setup.
@@ -36,6 +34,7 @@ class Lycos extends Client {
 			leaveOnEmpty: true,
 			leaveOnEmptyCooldown: 10000
 		});
+		this.guildconfig = require("./config/server.json");
 		this.player
 
 			// Send a message when a track starts
@@ -200,9 +199,8 @@ class Lycos extends Client {
 		console.log(`[Events] - Loading ${totalEvents}/${eventFiles.length} event(s).`);
 	}
 }
-module.exports.client = new Lycos({
+module.exports.client = new Bot ({
 	sync: true,
 	autoReconnect: true,
-	//fetchAllMembers: true,
 	disableEveryone: true,
 });
