@@ -109,7 +109,6 @@ class Lycos extends Client {
 
 		// eslint-disable-next-line no-undef
 		process.setMaxListeners(0);
-		connection_mysql.init();
 		this._loadEventsModules();
 		this._loadCommandsModules();
 		this.login(this.config.token);
