@@ -1,4 +1,4 @@
-const e = require("../config.js").emotes;
+const e = require("../config/config.js").emotes;
 const moment = require("moment");
 moment.locale("en");
 
