@@ -9,7 +9,6 @@ const { Provider, Client: PictURLClient } = require("pict-url");
 const { GiveawaysManager } = require("discord-giveaways");
 const logs = require('discord-logs');
 const { Player } = require("discord-player");
-const connection_mysql = require('./utils/connectmysql');
 /**
  * @class Lycos
  * @extends {Client}
