@@ -15,7 +15,7 @@ class Bot extends Client {
 	constructor(options) {
 		super(options);
 		// This will load the config.js file that contains our basic setup.
-		this.config = require("./config.js");
+		this.config = require("./config/config.js");
 		// Commands are loaded in collections where they can be read from.
 		this.commands = new Collection();
 		// Aliases are loaded in collections where they can be read from.
